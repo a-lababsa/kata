@@ -11,7 +11,7 @@ describe("Gilded Rose", function () {
   it("Should Golden Master", () => {
     const gildedRose = new Shop(fixturesItems)
     const items = gildedRose.updateQuality();
-    items.forEach(item => console.log(`${item.name}, ${item.sellIn}, ${item.quality}`));
+    //items.forEach(item => console.log(`${item.name}, ${item.sellIn}, ${item.quality}`));
     // items 0
     expect(items[0].name).toBe("+5 Dexterity Vest")
     expect(items[0].sellIn).toBe(9)

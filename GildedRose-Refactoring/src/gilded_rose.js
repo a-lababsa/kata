@@ -6,58 +6,55 @@ class Item {
   }
 }
 
+const BACKSTAGE = 'Backstage passes to a TAFKAL80ETC concert';
+const SULFURAS = 'Sulfuras, Hand of Ragnaros';
+const AGED_BRIE = 'Aged Brie';
+
 class Shop {
   constructor(items = []) {
     this.items = items;
   }
+
   updateQuality() {
     for (let i = 0; i < this.items.length; i++) {
-      if (this.items[i].name != 'Aged Brie' && this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
-        if (this.items[i].quality > 0) {
-          if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-            this.items[i].quality = this.items[i].quality - 1;
-          }
-        }
-      } else {
-        if (this.items[i].quality < 50) {
-          this.items[i].quality = this.items[i].quality + 1;
-          if (this.items[i].name == 'Backstage passes to a TAFKAL80ETC concert') {
-            if (this.items[i].sellIn < 11) {
-              if (this.items[i].quality < 50) {
-                this.items[i].quality = this.items[i].quality + 1;
-              }
-            }
-            if (this.items[i].sellIn < 6) {
-              if (this.items[i].quality < 50) {
-                this.items[i].quality = this.items[i].quality + 1;
-              }
-            }
-          }
-        }
+      if (this.isDifferentTo(i, SULFURAS)) {
+        this.removeOneSellIn(i)
       }
-      if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-        this.items[i].sellIn = this.items[i].sellIn - 1;
-      }
-      if (this.items[i].sellIn < 0) {
-        if (this.items[i].name != 'Aged Brie') {
-          if (this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
-            if (this.items[i].quality > 0) {
-              if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-                this.items[i].quality = this.items[i].quality - 1;
-              }
-            }
-          } else {
-            this.items[i].quality = this.items[i].quality - this.items[i].quality;
-          }
-        } else {
-          if (this.items[i].quality < 50) {
-            this.items[i].quality = this.items[i].quality + 1;
-          }
+      if (this.isDifferentTo(i, AGED_BRIE) && this.isDifferentTo(i, BACKSTAGE) && this.isDifferentTo(i, SULFURAS)) {
+        this.removeOneQuality(i);
+        if (this.isSellInLowerZero(i)) {
+          this.items[i].quality = this.items[i].quality - this.items[i].quality;
         }
+      } else if (this.isQualityLowerFifty(i)) {
+        this.addOneQuality(i);
       }
     }
 
     return this.items;
+  }
+
+  isSellInLowerZero(i) {
+    return this.items[i].sellIn < 0;
+  }
+
+  isQualityLowerFifty(i) {
+    return this.items[i].quality < 50;
+  }
+
+  addOneQuality(i) {
+    this.items[i].quality = this.items[i].quality + 1;
+  }
+
+  removeOneQuality(i) {
+    this.items[i].quality = this.items[i].quality - 1;
+  }
+
+  removeOneSellIn(i) {
+    this.items[i].sellIn = this.items[i].sellIn - 1;
+  }
+
+  isDifferentTo(i, constant) {
+    return this.items[i].name != constant;
   }
 }
 
