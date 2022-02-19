@@ -27,42 +27,32 @@ final class GildedRose
         }
     }
 
+    private function inGildedRose(string $name)
+    {
+        return in_array($name, [self::AGEDBRIE, self::BACKSTAGE, self::SULFURAS]);
+    }
+
     public function updateQuality(): void
     {
         foreach ($this->items as $item) {
-            if ($item->name != $this::AGEDBRIE and $item->name != $this::BACKSTAGE) {
-                if ($item->quality > 0) {
-                    if ($item->name != $this::SULFURAS) {
-                        $item->quality = $item->quality - 1;
-                    }
-                }
-            } else {
-                $this->upgradeQuality($item);
-                if ($item->quality < 50 && $item->name == $this::BACKSTAGE) {
-                    if ($item->sell_in < 11) {
-                        $this->upgradeQuality($item);
-                    }
-                }
-            }
-
-            if ($item->name != $this::SULFURAS) {
+            if ($item->name != self::SULFURAS) {
                 $item->sell_in = $item->sell_in - 1;
             }
 
-            if ($item->sell_in < 0) {
-                if ($item->name != $this::AGEDBRIE) {
-                    if ($item->name != $this::BACKSTAGE) {
-                        if ($item->quality > 0) {
-                            if ($item->name != $this::SULFURAS) {
-                                $item->quality = $item->quality - 1;
-                            }
-                        }
-                    } else {
-                        $item->quality = $item->quality - $item->quality;
-                    }
-                } else {
+            if (!$this->inGildedRose($item->name)) {
+                if ($item->sell_in < 0) {
                     $this->upgradeQuality($item);
+                    $item->quality = $item->quality - 1;
                 }
+                $item->quality = $item->quality - 1;
+            } else {
+                $this->upgradeQuality($item);
+            }
+            if ($item->name == self::BACKSTAGE && $item->sell_in < 11) {
+                $this->upgradeQuality($item);
+            }
+            if ($item->sell_in < 0) {
+                $this->upgradeQuality($item);
             }
         }
     }
