@@ -20,7 +20,8 @@
         "phpstan/phpstan-phpunit": "^0.12.18",
         "symplify/easy-coding-standard": "^9.3",
         "symplify/phpstan-extensions": "^9.3",
-        "approvals/approval-tests": "^1.4"
+        "approvals/approval-tests": "^1.4",
+        "spatie/phpunit-watcher": "^1.23"
     },
     "scripts": {
         "checkcode": "phpcs src tests --standard=PSR12",
@@ -30,6 +31,10 @@
         "test-coverage": "phpunit --coverage-html build/coverage",
         "check-cs": "ecs check",
         "fix-cs": "ecs check --fix",
-        "phpstan": "phpstan analyse --ansi"
+        "phpstan": "phpstan analyse --ansi",
+        "test:watch": [
+            "Composer\\Config::disableProcessTimeout",
+            "phpunit-watcher watch < /dev/tty"
+        ]
     }
 }
