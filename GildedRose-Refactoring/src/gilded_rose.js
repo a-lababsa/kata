@@ -13,11 +13,15 @@ class Item {
   }
 
   upgradeQuality() {
-    this.quality++
+    if (this.quality < Item.MAX_QUALITY) {
+      this.quality++
+    }
   }
 
   downgradeQuality() {
-    this.quality--
+    if (this.quality > Item.MIN_QUALITY) {
+      this.quality--
+    }
   }
 
 }
@@ -28,46 +32,34 @@ class Shop {
   }
   updateQuality() {
     this.items.forEach((item) => {
-      if (item.name != Item.BRIE && item.name != Item.BACKSTAGE) {
-        if (item.quality > Item.MIN_QUALITY) {
-          if (item.name != Item.SULFURAS) {
-            item.downgradeQuality();
+      switch (item.name) {
+        case Item.BRIE:
+          if (item.sellIn < 0) {
+            item.upgradeQuality()
           }
-        }
-      } else {
-        if (item.quality < Item.MAX_QUALITY) {
-          item.upgradeQuality();
-          if (item.name == Item.BACKSTAGE) {
-            if (item.sellIn < 11) {
-              if (item.quality < Item.MAX_QUALITY) {
-                item.upgradeQuality();
-              }
-            }
-            if (item.sellIn < 6) {
-              if (item.quality < Item.MAX_QUALITY) {
-                item.upgradeQuality();
-              }
-            }
-          }
-        }
-      }
-      if (item.name != Item.SULFURAS) {
-        item.sellIn = item.sellIn - 1;
-      }
-      if (item.sellIn < 0) {
-        if (item.name != Item.BRIE) {
-          if (item.name != Item.BACKSTAGE) {
-            if (item.quality > Item.MIN_QUALITY) {
-              if (item.name != Item.SULFURAS) {
-                item.downgradeQuality();
-              }
-            }
-          }
-        } else {
-          if (item.quality < Item.MAX_QUALITY) {
+          break
+        case Item.BACKSTAGE:
+          if (item.sellIn < 11) {
             item.upgradeQuality();
           }
+          if (item.sellIn < 6) {
+            item.upgradeQuality();
+          }
+          break
+        default:
+          break
+      }
+      if (![Item.BRIE, Item.BACKSTAGE, Item.SULFURAS].includes(item.name)) {
+        item.downgradeQuality();
+        if (item.sellIn < 0) {
+          item.downgradeQuality()
         }
+      } else {
+        item.upgradeQuality();
+      }
+
+      if (item.name != Item.SULFURAS) {
+        item.sellIn = item.sellIn - 1;
       }
     })
 
