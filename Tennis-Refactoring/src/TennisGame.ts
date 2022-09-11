@@ -1,8 +1,8 @@
-import { totalmem } from "os";
 
 export interface TennisGame {
   wonPoint(playerName: string): void;
   getScore(): string;
+  equality(): boolean;
 }
 
 export module ScoreAll {
@@ -22,6 +22,7 @@ export module Score {
 export class Player {
   private playerScore: number = 0
   private playerName: string
+  private playerResultat: string = ''
 
   constructor(name: string) {
     this.playerName = name
@@ -37,5 +38,13 @@ export class Player {
 
   get name(): string {
     return this.playerName
+  }
+
+  get resultat(): string {
+    return this.playerResultat
+  }
+
+  set resultat(value: string) {
+    this.playerResultat = value
   }
 }
