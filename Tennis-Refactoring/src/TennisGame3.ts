@@ -25,6 +25,10 @@ export class TennisGame3 implements TennisGame {
     }
   }
 
+  equality(): boolean {
+    return true
+  }
+
   wonPoint(playerName: string): void {
     if (playerName === 'player1')
       this.p1 += 1;
